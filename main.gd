@@ -32,9 +32,9 @@ var can_move: bool
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	new_game()
+	newGame()
 	
-func new_game():
+func newGame():
 	move_direction = up
 	score = 0
 	can_move = true
@@ -100,11 +100,10 @@ func isGameStarted():
 	can_move = false
 	if not game_started:
 		startGame()
-				
+
 func startGame():
 	game_started = true
 	$MoveTimer.start()
-
 
 func onTimerTimeout():
 	#allow snake movement
@@ -141,14 +140,16 @@ func isFoodEaten():
 		spawnBerry()
 	
 func spawnBerry():
+	generateRandomPosition()
+	$Food.position = scalePosition(berry_pos)
+	regen_berry = true
+
+func generateRandomPosition():
 	while regen_berry:
 		regen_berry = false
 		berry_pos = Vector2(randi_range(0, cells - 1), randi_range(0, cells - 1))
 		isBerryOutOfSnake()
-		
-	$Food.position = scalePosition(berry_pos)
-	regen_berry = true
-
+	
 func isBerryOutOfSnake():
 	for i in snake_data:
 			if berry_pos == i:
@@ -162,4 +163,4 @@ func endGame():
 
 
 func _on_game_over_menu_restart():
-	new_game()
+	newGame()
